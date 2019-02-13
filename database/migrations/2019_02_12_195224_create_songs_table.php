@@ -17,6 +17,8 @@ class CreateSongsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->string('featuring')->nullable();
+            $table->unsignedInteger('artist_id');
+            $table->unsignedInteger('album_id');
             $table->foreign('artist_id')->references('id')->on('artists')->onDelete('cascade');
             $table->foreign('album_id')->references('id')->on('albums')->onDelete('cascade');
             $table->timestamps();
