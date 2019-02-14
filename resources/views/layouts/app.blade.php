@@ -18,6 +18,25 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        .albums {
+            display: flex;
+        }
+        .single-album {
+            background-color: lightpink;
+            margin: 10px;
+            padding: 10px;
+        }
+        .type {
+            color: lightgray;
+        }
+        .option-for-item {
+            text-align: right;
+        }
+        .py-4 {
+            margin: 0 50px;
+        }
+    </style>
 </head>
 <body>
     <div id="app">

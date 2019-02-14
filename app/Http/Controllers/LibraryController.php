@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Album;
 use App\Artist;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class LibraryController extends Controller
@@ -15,9 +16,9 @@ class LibraryController extends Controller
      */
     public function index()
     {
-        $artists = Artist::get();
-        $albums = Album::get();
-        return view('library', compact('artists', 'albums'));
+        $artists = Artist::where('user_id', Auth::id())->get();
+        // TODO: figure out how to connect all into one request and collection
+        return view('library.index', compact('artists', 'albums'));
     }
 
     /**
@@ -27,7 +28,7 @@ class LibraryController extends Controller
      */
     public function create()
     {
-        //
+        return view('library.create');
     }
 
     /**

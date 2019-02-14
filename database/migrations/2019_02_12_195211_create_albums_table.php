@@ -18,6 +18,8 @@ class CreateAlbumsTable extends Migration
             $table->string('title');
             $table->string('cover_url')->nullable();
             $table->unsignedInteger('artist_id');
+            $table->unsignedInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('artist_id')->references('id')->on('artists')->onDelete('cascade');
             $table->timestamps();
         });
@@ -30,6 +32,10 @@ class CreateAlbumsTable extends Migration
      */
     public function down()
     {
+        Schema::table('albums', function (Blueprint $table) {
+            $table->dropForeign('user_id');
+            $table->dropForeign('artist_id');
+        });
         Schema::dropIfExists('albums');
     }
 }
