@@ -2,13 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Album;
 use App\Artist;
+use function foo\func;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class LibraryController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,9 +26,16 @@ class LibraryController extends Controller
      */
     public function index()
     {
-        $artists = Artist::where('user_id', Auth::id())->get();
-        // TODO: figure out how to connect all into one request and collection
-        return view('library.index', compact('artists', 'albums'));
+        $artists = Artist::where('user_id', Auth::id())
+            // eager loading to solve N+1 Query Problem
+            ->with([
+                'albums' => function($q) {
+                    $q->with(['songs'])->orderBy('title');
+                }
+            ])
+            ->orderBy('name', 'ASC')
+            ->get();
+        return view('library.index', compact('artists'));
     }
 
     /**
@@ -28,7 +45,9 @@ class LibraryController extends Controller
      */
     public function create()
     {
-        return view('library.create');
+        $artists = Artist::where('user_id', Auth::id())->get()->pluck('name', 'id');
+//        dd($artists);
+        return view('library.create', compact('artists'));
     }
 
     /**
@@ -61,7 +80,9 @@ class LibraryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $artist = Artist::where('id', $id)->first();
+        dd($artist->albums);
+        return view('library.create', compact('artist'));
     }
 
     /**

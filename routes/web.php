@@ -33,3 +33,5 @@ Route::put('/library/{slot}', 'LibraryController@update')->name('library.update'
 
 Route::delete('/library/{slot}', 'LibraryController@destroy')->name('library.destroy');
 
+Route::get('/api/library', 'ApiLibraryController@index');
+
